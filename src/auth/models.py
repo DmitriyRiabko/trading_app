@@ -4,13 +4,12 @@ from datetime import datetime
 from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 
 
-from sqlalchemy.orm import DeclarativeBase
-
-class Base(DeclarativeBase):
-    pass
+from sqlalchemy.ext.declarative import declarative_base
 
 
-metadata = MetaData()
+Base = declarative_base()
+
+metadata= Base.metadata
 
 role = Table (
     "role", metadata,
