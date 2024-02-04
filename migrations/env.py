@@ -20,7 +20,7 @@ config.set_section_option(section, "DB_USER", DB_USER)
 config.set_section_option(section, "DB_NAME", DB_NAME)
 config.set_section_option(section, "DB_PASS", DB_PASS)
 
-print(f'using db{DB_NAME} - {DB_HOST}:{DB_PORT}')
+print(f'using DB: {DB_NAME} - {DB_HOST}:{DB_PORT}')
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
