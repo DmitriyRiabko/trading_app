@@ -5,7 +5,9 @@ from fastapi import Depends
 from fastapi_users.db import SQLAlchemyBaseUserTableUUID, SQLAlchemyUserDatabase
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
-from config import DB_USER, DB_PORT , DB_HOST, DB_NAME, DB_PASS
+from config import DB_USER, DB_HOST, DB_NAME, DB_PASS, DB_PORT
+from models.models import role
+
 
 from sqlalchemy import TIMESTAMP, Column, Boolean, ForeignKey, Integer, String
 
@@ -22,8 +24,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
     username:str = Column(String, nullable=False),
     password:str = Column(String,nullable=False),
     registered_at:str = Column(TIMESTAMP, default=datetime.utcnow),
-    role_id:str = Column(Integer, ForeignKey('roles.id')),
-    email: str = Column(String(length=320), unique=True, index=True, nullable=False)
+    role_id:str = Column(Integer, ForeignKey(role.c.id)),
     hashed_password: str = Column(String(length=1024), nullable=False)    
     is_active: bool = Column(Boolean, default=True, nullable=False)
     is_superuser: bool = Column(Boolean, default=False, nullable=False)
@@ -31,7 +32,7 @@ class User(SQLAlchemyBaseUserTableUUID, Base):
 
 
 engine = create_async_engine(DATABASE_URL)
-async_session_maker = async_sessionmaker(engine, expire_on_commit=False)
+async_session_maker = async_sessionmaker(engine, expire_on_commit=False, echo=True)
 
 
 async def create_db_and_tables():
