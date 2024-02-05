@@ -10,7 +10,7 @@ operation = Table(
     Column('quantity',String),
     Column('figi',String),
     Column('instrument_type',String, nullable=False),
-    Column('date',TIMESTAMP),
+    Column('date',TIMESTAMP(timezone=True)),
     Column('type',String),
     
     
