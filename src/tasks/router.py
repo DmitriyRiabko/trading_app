@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from fastapi import Depends
 from .tasks import send_email_report_dashboard
-from auth.models import User
 from auth.base_config import current_user
 
 router = APIRouter(
