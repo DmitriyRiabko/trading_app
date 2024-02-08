@@ -1,34 +1,33 @@
 from datetime import datetime
-from sqlalchemy import MetaData, Table,Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean
+from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, JSON, Boolean
+from sqlalchemy.orm import relationship
 from datetime import datetime
-from fastapi_users.db import SQLAlchemyBaseUserTable, SQLAlchemyUserDatabase
 
-
-from sqlalchemy.ext.declarative import declarative_base
-
-
-Base = declarative_base()
-
-metadata= Base.metadata
-
-role = Table (
-    "role", metadata,
-    Column('id', Integer, primary_key=True),
-    Column('name', String, nullable=False),
-    Column('permissions',JSON)
-)
+from database import Base
 
 
 
 
+class Role(Base):
+    __tablename__ = 'role'
 
-class User(SQLAlchemyBaseUserTable[int], Base):
-    id:int = Column( Integer, primary_key=True)
-    email:str = Column(String,nullable=False)
-    username:str = Column(String, nullable=False)
-    registered_at:str = Column(TIMESTAMP, default=datetime.utcnow)
-    role_id:int = Column(Integer, ForeignKey(role.c.id))
-    hashed_password: str = Column(String(length=1024), nullable=False)   
-    is_active: bool = Column(Boolean, default=True, nullable=False)
-    is_superuser: bool = Column(Boolean, default=False, nullable=False)
-    is_verified: bool = Column(Boolean, default=False, nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    permissions = Column(JSON)
+    
+    
+
+class User(Base):
+    __tablename__ = 'user'
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String, nullable=False)
+    username = Column(String, nullable=False)
+    registered_at = Column(TIMESTAMP, default=datetime.utcnow)
+    role_id = Column(Integer, ForeignKey('role.id', ondelete="CASCADE"))
+    hashed_password = Column(String(length=1024), nullable=False)
+    is_active = Column(Boolean, default=True, nullable=False)
+    is_superuser = Column(Boolean, default=False, nullable=False)
+    is_verified = Column(Boolean, default=False, nullable=False)
+
+    role = relationship("Role")
